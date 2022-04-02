@@ -17,6 +17,8 @@ import android.widget.VideoView;
 public class MainActivity extends AppCompatActivity {
     static MediaPlayer player;
     public static int upaljeno;
+    private static final String FILE_NAME = "text.txt";
+    private static final String NOVAC = "novac.txt";
     public static final String zvuk = "zvuk.txt";
     IOclass olovka = new IOclass(this);
 
@@ -26,7 +28,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Button ikona = findViewById(R.id.b_zvuk);
         player = MediaPlayer.create(this, R.raw.zvuk);
-        boolean stanje = player.isPlaying();
+        Boolean prvi_put = getSharedPreferences("PREFERENCE",MODE_PRIVATE).getBoolean("prvi_put", true);
+        if(prvi_put)
+        {
+            olovka.sacuvaj(0,NOVAC);
+            olovka.sacuvaj(0,FILE_NAME);
+            olovka.sacuvaj(1,zvuk);
+            getSharedPreferences("PREFERENCE", MODE_PRIVATE).edit().putBoolean("prvi_put", false).commit();
+        }
         upaljeno = Integer.parseInt(olovka.ucitaj(zvuk));
         if (upaljeno == 1) {
                 player.start();
